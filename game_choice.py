@@ -77,13 +77,13 @@ class Games():
 
     def button_event(self, button):
         if button == 4:
-            self.set_direction(MOVE_L)
+            return pygame.K_LEFT
         elif button == 7:
-            self.set_direction(MOVE_R)
+            return pygame.K_RIGHT
         elif button == 5:
-            self.set_direction(MOVE_U)
+            return pygame.K_UP
         elif button == 6:
-            self.set_direction(MOVE_D)
+            return pygame.K_DOWN
 
     def run(self):
         """Select the game"""
@@ -100,25 +100,28 @@ class Games():
         pygame.time.set_timer(USEREVENT, 100)  # every 100 miliseconds
         pygame.time.set_timer(USEREVENT+1, 10)  # every 10 milliseconds
         while self.running and not self.ended:
+            key = False
             event = pygame.event.wait()
             if event.type == QUIT:
                 self.running = False
             if event.type == USEREVENT+1:
                 for button in self.buttons_pressed(controls.get_buttons()):
                     log.debug("Button pressed %s", button)
-                    self.button_event(button)
+                    key = self.button_event(button)
             if event.type == KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                    key = event.key
+            if event.type == KEYDOWN or event.type == USEREVENT+1:
+                if key == pygame.K_LEFT:
                     selected_game = self.next_game(selected_game, -1)
-                if event.key == pygame.K_RIGHT:
+                if key == pygame.K_RIGHT:
                     selected_game = self.next_game(selected_game, 1)
-                if event.key == pygame.K_UP:
+                if key == pygame.K_UP:
                     self.running = False
                     self.ended = True
-                if event.key == pygame.K_DOWN:
+                if key == pygame.K_DOWN:
                     self.ended = True
                     self.running = False
-                if event.key == pygame.K_q:
+                if key == pygame.K_q:
                     self.ended = True
                     self.running = False
                 self.show_logo(self.games[selected_game].LOGO)
