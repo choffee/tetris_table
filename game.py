@@ -54,7 +54,10 @@ except ImportError:
 
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+if os.getenv('DEBUG') == 'OFF':
+    logging.basicConfig(level=logging.ERROR)
+else:
+    logging.basicConfig(level=logging.DEBUG)
 
 board_width = 10
 board_height_hidden = 2
