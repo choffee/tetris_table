@@ -88,26 +88,32 @@ class Tetris():
         """Move the shape down one"""
         self.last_drop_time = pygame.time.get_ticks()
         self.shape_pos_y = self.shape_pos_y - 1
+        print(self.shape_pos_y)
         self.check_collisions()
 
-    def check_colliions(self):
+    def check_collisions(self):
         """Check the block is not bumping into anything"""
-        pass
+        print("Checking Collisions")
+        if self.shape_pos_y < 10:
+            print( "End of pos")
+            self.new_shape()
+
 
     def run(self):
         """Run the game"""
         print("Run the game")
+        pygame.display.init()
         show_board(self.board)
         print(self.shape)
         self.running = True
-        pygame.time.event(USEREVENT, 100) # every 100 miliseconds
+        pygame.time.set_timer(USEREVENT, 100) # every 100 miliseconds
         while self.running:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.running = False
-                if event.type == pygame.USEREVENT:
-                    if self.time_till_next_drop < 0:
-                        make_drop
+                if event.type == USEREVENT:
+                    if self.time_till_next_drop() < 0:
+                        self.make_drop()
 
 def main():
     """Start the main game"""
