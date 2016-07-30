@@ -19,9 +19,13 @@
 
 from random import randrange
 
+import logging
 import pygame
 from pygame.locals import *
 from pygame.color import *
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
 
 width = 10
 height = 20
@@ -56,7 +60,7 @@ def new_board():
             board[y].append(0)
     return board
 
-def show_board(board):
+def show_board(board, shape=[], shape_x=0, shape_y=0):
     for y in board:
         print(y)
 
@@ -76,7 +80,7 @@ class Tetris():
         """Select a new shape and position it"""
         self.shape = shapes[randrange(len(shapes))]
         self.shape_pos_x = randrange(width - len(self.shape))
-        self.shape_pos_y = height
+        self.shape_pos_y = 20 - len(self.shape[0])
         self.last_drop_time = pygame.time.get_ticks()
 
     def time_till_next_drop(self):
@@ -87,16 +91,41 @@ class Tetris():
     def make_drop(self):
         """Move the shape down one"""
         self.last_drop_time = pygame.time.get_ticks()
-        self.shape_pos_y = self.shape_pos_y - 1
+        self.shape_pos_y -= 1
         print(self.shape_pos_y)
-        self.check_collisions()
+        if self.check_collisions():
+            log.debug('Collided %s', self.shape_pos_y)
+            self.shape_pos_y += 1
+            self.stick_shape()
+            self.new_shape()
+        else:
+            show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
+
+
+    def stick_shape(self):
+        """Stick the shape on the board"""
+        for shape_y, shape_row in enumerate(self.shape):
+            for shape_x, shape_cell in enumerate(shape_row):
+                self.board[shape_y + self.shape_pos_y][shape_x + self.shape_pos_x] += shape_cell
+
 
     def check_collisions(self):
         """Check the block is not bumping into anything"""
         print("Checking Collisions")
-        if self.shape_pos_y < 10:
-            print( "End of pos")
-            self.new_shape()
+        for shape_y, shape_row in enumerate(self.shape):
+            for shape_x, shape_cell in enumerate(shape_row):
+                x_pos = self.shape_pos_x + shape_x
+                y_pos = self.shape_pos_y + shape_y
+                log.debug('x_check: %s, y_check: %s', x_pos, y_pos)
+                try:
+                    if y_pos < 0 or x_pos < 0:
+                        return True
+                    if self.board[y_pos][x_pos] and shape_cell:
+                        return True
+                except IndexError:
+                    log.debug("index error:%s %s", x_pos, y_pos)
+                    return True
+        return False
 
 
     def run(self):
