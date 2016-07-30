@@ -21,8 +21,11 @@ from random import randrange
 
 import logging
 import pygame
+import os
 from pygame.locals import *
 from pygame.color import *
+
+os.putenv('SDL_VIDEODRIVER', 'fbcon')
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)

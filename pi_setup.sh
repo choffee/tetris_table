@@ -30,6 +30,7 @@ add_line /boot/config.txt "dtparam=i2c_arm=on"
 echo "Adding pi users to groups"
 adduser pi i2c
 adduser pi spi
+adduser pi tty
 
 echo "Setting hostname"
 echo tetristable >/etc/hostname
