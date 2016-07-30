@@ -25,7 +25,10 @@ import os
 from pygame.locals import *
 from pygame.color import *
 
-os.putenv('SDL_VIDEODRIVER', 'fbcon')
+os.putenv('SDL_FBDEV', '/dev/fb0')
+os.putenv('SDL_VIDEODRIVER', 'fbcons')
+os.putenv('SDL_NOMOUSE', '1')
+os.putenv('SDL_NOSOUND', '1')
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
