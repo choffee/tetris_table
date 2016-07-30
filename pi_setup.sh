@@ -31,6 +31,8 @@ echo "Adding pi users to groups"
 adduser pi i2c
 adduser pi spi
 adduser pi tty
+cp -n /lib/udev/rules.d/50-udev-default.rules /lib/udev/rules.d/50-udev-default.rules.orig
+sed -i 's/SUBSYSTEM=="tty", KERNEL=="tty\[0-9\]\*", GROUP="tty", MODE="0620"/SUBSYSTEM=="tty", KERNEL=="tty[0-9]*", GROUP="tty", MODE="0660"/' /lib/udev/rules.d/50-udev-default.rules
 
 echo "Setting hostname"
 echo tetristable >/etc/hostname
