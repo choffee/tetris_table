@@ -9,7 +9,7 @@ led_height = 20
 led_count = led_width * led_height
 
 led_pin = 18
-led_freq_hz = 44000
+led_freq_hz = 800000
 led_dma = 5
 led_invert = False
 led_brightness = 64
@@ -22,7 +22,7 @@ def main():
     for i in range(strip.numPixels()):
         strip.setPixelColor(i, colour)
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(10/1000.0)
 
 
 if __name__ == "__main__":
