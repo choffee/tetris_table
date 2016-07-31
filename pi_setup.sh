@@ -13,7 +13,7 @@ add_line() {
 }
 
 echo "Installing packages"
-apt-get install python3-smbus python3-spidev i2c-tools python3-pygame
+apt-get install -y python3-smbus python3-spidev python3-dev i2c-tools python3-pygame scons swig
 
 echo "Enabling spi bus"
 # Is there a module also?
@@ -42,4 +42,7 @@ sync
 
 echo "You might want to reboot now :)"
 
-
+# Check out https://github.com/richardghirst/rpi_ws281x
+# and change the /tmp/maildrop file to /dev/maildrop
+# and the device from 100 to 249 in mailbox.c
+# then scons, then python3 setup.py install
