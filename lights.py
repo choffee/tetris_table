@@ -14,6 +14,26 @@ led_dma = 5
 led_invert = False
 led_brightness = 64
 
+def strip_pos_to_board(led_num):
+    ypos = led_num % led_width
+    xpos = led_num / led_width
+    return (xpos, ypos)
+
+class Board(object):
+    def __init__(self):
+        """Setup a board"""
+        self.strip = Adafruit_NeoPixel(led_count, led_pin, led_freq_hz, led_dma, led_invert, led_brightness)
+
+    def show_board(self, board):
+        """Show a board on the lights"""
+        for led in range(led_count):
+            xpos, ypos = strip_pos_to_board(led)
+            color = board[xpos][ypos]
+            self.strip.setPixelColor(led, color)
+        self.strip.show()
+
+
+
 
 def main():
     strip = Adafruit_NeoPixel(led_count, led_pin, led_freq_hz, led_dma, led_invert, led_brightness)

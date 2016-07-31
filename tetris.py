@@ -24,6 +24,7 @@ import pygame
 import os
 from pygame.locals import *
 from pygame.color import *
+import lights
 
 if os.getenv('PI') == 1:
     os.putenv('SDL_FBDEV', '/dev/fb0')
@@ -87,10 +88,12 @@ def drop_shape(board, shape, xpos, ypos):
     else:
         return board
 
+light_board = lights.Board()
 def show_board(board, shape=[], shape_x=0, shape_y=0):
     """Display the board"""
     for line in drop_shape(board, shape, shape_x, shape_y):
         print(line)
+    light_board.show_board(drop_shape(board, shape, shape_x, shape_y))
 
 class Tetris():
     """The testris game"""
