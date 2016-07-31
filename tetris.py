@@ -67,9 +67,31 @@ def new_board():
             board[y].append(0)
     return board
 
+def drop_shape(board, shape, xpos, ypos):
+    """Drop a shape into a board"""
+    if len(shape) > 0:
+        this_board = []
+        shape_x_max = xpos + len(shape[0])
+        shape_y_max = ypos + len(shape)
+        for board_y, board_line in enumerate(board):
+            line = []
+            for board_x, cell in enumerate(board_line):
+                print(board_x,xpos,shape_x_max)
+                if board_x >= xpos and board_x < shape_x_max and \
+                        board_y >= ypos and board_y < shape_y_max:
+                    log.debug("shape_pos: y:%s, x:%s", board_y - ypos, board_x - xpos)
+                    line.append(cell + shape[board_y - ypos][board_x - xpos])
+                else:
+                    line.append(cell)
+            this_board.append(line)
+        return this_board
+    else:
+        return board
+
 def show_board(board, shape=[], shape_x=0, shape_y=0):
-    for y in board:
-        print(y)
+    """Display the board"""
+    for line in drop_shape(board, shape, shape_x, shape_y):
+        print(line)
 
 class Tetris():
     """The testris game"""
