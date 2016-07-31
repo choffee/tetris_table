@@ -76,7 +76,6 @@ def drop_shape(board, shape, xpos, ypos):
         for board_y, board_line in enumerate(board):
             line = []
             for board_x, cell in enumerate(board_line):
-                print(board_x,xpos,shape_x_max)
                 if board_x >= xpos and board_x < shape_x_max and \
                         board_y >= ypos and board_y < shape_y_max:
                     log.debug("shape_pos: y:%s, x:%s", board_y - ypos, board_x - xpos)
