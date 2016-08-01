@@ -162,14 +162,44 @@ class Tetris():
                     return True
         return False
 
-    def buttons_changed(self, new_values):
+    def buttons_pressed(self, new_values):
+        pressed = []
         for x, val in enumerate(new_values):
             if val != self.button_state[x]:
                 self.button_state[x] = val
                 log.debug("Button state: %s", self.button_state)
-                return True
-        return False
+                pressed.append(x)
+        return pressed
 
+    def button_event(self, button):
+        if button == 0:
+            self.move_left()
+        elif button == 3:
+            self.move_right()
+        elif button == 1:
+            self.rotate()
+
+    def move_right(self):
+        """Move the shape right"""
+        if self.shape_pos_x + len(self.shape) < width:
+            self.shape_pos_x += 1
+            if self.check_collisions():
+              self.shape_pos_x -= 1
+            else:
+              show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
+
+    def move_left(self):
+        """Move the shape right"""
+        if self.shape_pos_x > 0:
+            self.shape_pos_x -= 1
+            if self.check_collisions():
+              self.shape_pos_x += 1
+            else:
+              show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
+
+
+    def rotate(self):
+        pass
 
     def run(self):
         """Run the game"""
@@ -190,8 +220,9 @@ class Tetris():
                     if self.time_till_next_drop() < 0:
                         self.make_drop()
                 if event.type == USEREVENT+1:
-                    if self.buttons_changed(controls.get_buttons()):
-                        log.debug("Button pressed")
+                    for button in self.buttons_pressed(controls.get_buttons()):
+                        log.debug("Button pressed %s", button)
+                        self.button_event(button)
 
 def main():
     """Start the main game"""
