@@ -25,6 +25,7 @@ import os
 from pygame.locals import *
 from pygame.color import *
 import lights
+import buttons
 
 if os.getenv('PI') == 1:
     os.putenv('SDL_FBDEV', '/dev/fb0')
@@ -37,6 +38,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 width = 10
 height = 20
+
+BUTTONEVENT = USEREVENT+1
 
 colors = [
     [0, 0, 0],          # 0 - Black
@@ -106,6 +109,7 @@ class Tetris():
         self.shape_pos_x = 0
         self.last_drop_time = pygame.time.get_ticks()
         self.new_shape()
+        self.button_state = [True] * 8
 
     def new_shape(self):
         """Select a new shape and position it"""
@@ -158,15 +162,26 @@ class Tetris():
                     return True
         return False
 
+    def buttons_changed(self, new_values):
+        for x, val in enumerate(new_values):
+            if val != self.button_state[x]:
+                self.button_state[x] = val
+                log.debug("Button state: %s", self.button_state)
+                return True
+        return False
+
 
     def run(self):
         """Run the game"""
         print("Run the game")
         pygame.display.init()
+        #button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
+        controls = buttons.Buttons()
         show_board(self.board)
         print(self.shape)
         self.running = True
         pygame.time.set_timer(USEREVENT, 100) # every 100 miliseconds
+        pygame.time.set_timer(USEREVENT+1, 10) # every 10 milliseconds
         while self.running:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -174,6 +189,9 @@ class Tetris():
                 if event.type == USEREVENT:
                     if self.time_till_next_drop() < 0:
                         self.make_drop()
+                if event.type == USEREVENT+1:
+                    if self.buttons_changed(controls.get_buttons()):
+                        log.debug("Button pressed")
 
 def main():
     """Start the main game"""

@@ -20,8 +20,6 @@ class Buttons(object):
       
         gpio.setup(interupt_pin, GPIO.IN)
         gpio.add_event_detect(interupt_pin, GPIO.FALLING, callback=callback, bouncetime=5)
-        while True:
-            pass
          
 
     def get_buttons(self):
