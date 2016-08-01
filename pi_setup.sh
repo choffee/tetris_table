@@ -40,9 +40,18 @@ sed -i "s/127.0.1.1.*/127.0.1.1\ttetristable/g" /etc/hosts
 
 sync
 
+test -d Adafruit_Python_GPIO || git clone https://github.com/adafruit/Adafruit_Python_GPIO
+cd Adafruit_Python_GPIO
+python3 setup.py install
+cd ../
+
+test -d rpi_ws281x || git clone https://github.com/richardghirst/rpi_ws281x
+cd rpi_ws281x
+sed -i 's/\/tmp\/mail/\/dev/rpi-mail/;s/makedev(100/makedev(249/' mailbox.c
+scons
+cd python
+python3 setup.py install
+cd ../../
+
 echo "You might want to reboot now :)"
 
-# Check out https://github.com/richardghirst/rpi_ws281x
-# and change the /tmp/maildrop file to /dev/maildrop
-# and the device from 100 to 249 in mailbox.c
-# then scons, then python3 setup.py install
