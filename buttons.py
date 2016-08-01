@@ -3,7 +3,7 @@
 from Adafruit_GPIO import MCP230xx as mcs
 from Adafruit_GPIO import GPIO
 
-interupt_pin = 18
+interupt_pin = 23
 i2c_address = 0x20
 
 class Buttons(object):
