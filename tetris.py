@@ -24,14 +24,17 @@ import pygame
 import os
 from pygame.locals import *
 from pygame.color import *
-import lights
-import buttons
 
 if os.getenv('PI') == 1:
     os.putenv('SDL_FBDEV', '/dev/fb0')
     os.putenv('SDL_VIDEODRIVER', 'fbcons')
     os.putenv('SDL_NOMOUSE', '1')
     os.putenv('SDL_NOSOUND', '1')
+    import lights
+    import buttons
+else:
+    import nolights as lights
+    import nobuttons as buttons
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
@@ -97,6 +100,10 @@ def show_board(board, shape=[], shape_x=0, shape_y=0):
     for line in drop_shape(board, shape, shape_x, shape_y):
         print(line)
     light_board.show_board(drop_shape(board, shape, shape_x, shape_y))
+
+def rotate_shape(shape):
+    shape = zip(*shape.rotated())
+    return shape
 
 class Tetris():
     """The testris game"""
@@ -164,6 +171,7 @@ class Tetris():
 
     def buttons_pressed(self, new_values):
         pressed = []
+        # log.debug("Buttons pressed %s", new_values)
         for x, val in enumerate(new_values):
             if val != self.button_state[x]:
                 self.button_state[x] = val
@@ -199,7 +207,10 @@ class Tetris():
 
 
     def rotate(self):
-        pass
+        self.shape = rotate_shape(self.shape)
+        log.debug("Shape rotating")
+        if self.check_collisions():
+            self.shape = rotate_shape(self.shape)
 
     def run(self):
         """Run the game"""
