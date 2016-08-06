@@ -2,6 +2,7 @@
 
 from Adafruit_GPIO import MCP230xx as mcs
 from Adafruit_GPIO import GPIO
+import time
 
 interupt_pin = 23
 i2c_address = 0x20
@@ -23,12 +24,20 @@ class Buttons(object):
          
 
     def get_buttons(self):
-        return self.buttons.input_pins(range(8))
+        # Hack for broken buttons
+        pins = self.buttons.input_pins(range(8))
+        if pins == [True, True, True, True, False, False, False, True]:
+            pins = [True, True, True, True, True, False, True, True]
+        elif pins == [True, True, True, True, False, False, True, True]:
+            pins = [True, True, True, True, False, True, True, True]
+        return pins
 
 if __name__ == "__main__":
     butts = Buttons()
-    print(butts.get_buttons())
-    butts.add_callback(lambda x: print(butts.get_buttons()))
+    while True:
+        print(butts.get_buttons())
+        time.sleep(1)
+        #butts.add_callback(lambda x: print(butts.get_buttons()))
 
 
 

@@ -25,7 +25,7 @@ import os
 from pygame.locals import *
 from pygame.color import *
 
-if os.getenv('PI') == 1:
+if True:
     os.putenv('SDL_FBDEV', '/dev/fb0')
     os.putenv('SDL_VIDEODRIVER', 'fbcons')
     os.putenv('SDL_NOMOUSE', '1')
@@ -102,8 +102,10 @@ def show_board(board, shape=[], shape_x=0, shape_y=0):
     light_board.show_board(drop_shape(board, shape, shape_x, shape_y))
 
 def rotate_shape(shape):
-    shape = zip(*shape.rotated())
-    return shape
+    return [ [ shape[y][x]
+		for y in range(len(shape)) ]
+		for x in range(len(shape[0]) - 1, -1, -1) ]
+
 
 class Tetris():
     """The testris game"""
@@ -180,11 +182,11 @@ class Tetris():
         return pressed
 
     def button_event(self, button):
-        if button == 0:
+        if button == 4:
             self.move_left()
-        elif button == 3:
+        elif button == 7:
             self.move_right()
-        elif button == 1:
+        elif button == 5:
             self.rotate()
 
     def move_right(self):
