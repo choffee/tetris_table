@@ -153,7 +153,11 @@ class Tetris():
         """Stick the shape on the board"""
         for shape_y, shape_row in enumerate(self.shape):
             for shape_x, shape_cell in enumerate(shape_row):
-                self.board[shape_y + self.shape_pos_y][shape_x + self.shape_pos_x] += shape_cell
+                try:
+                    self.board[shape_y + self.shape_pos_y][shape_x + self.shape_pos_x] += shape_cell
+                except:
+                    log.error("Dropping shape:x-%s, y-%s, %s, %s", shape_x, shape_y, self.shape_pos_x, self.shape_pos_y)
+
         self.check_full_lines()
 
     def check_full_lines(self):
