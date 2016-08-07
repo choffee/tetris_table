@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 
 import time
+import logging as log
+import random
 
 class Buttons(object):
     def __init__(self):
         self.last_key = time.time()
 
     def get_buttons(self):
-        if time.time() - self.last_key > 2:
+        if time.time() - self.last_key > 1:
+            buttons = [True, True, True, True, True, True, True, True]
+            log.debug("Random Button time")
             self.last_key = time.time()
-            return [1]
+            buttons[random.randrange(4,8)] = False
+            return buttons
         return []

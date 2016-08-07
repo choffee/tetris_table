@@ -25,7 +25,7 @@ import os
 from pygame.locals import *
 from pygame.color import *
 
-if True:
+if os.getenv('PI') == 1:
     os.putenv('SDL_FBDEV', '/dev/fb0')
     os.putenv('SDL_VIDEODRIVER', 'fbcons')
     os.putenv('SDL_NOMOUSE', '1')
@@ -175,10 +175,10 @@ class Tetris():
         pressed = []
         # log.debug("Buttons pressed %s", new_values)
         for x, val in enumerate(new_values):
-            if val != self.button_state[x]:
-                self.button_state[x] = val
+            if val == False  and self.button_state[x] == True:
                 log.debug("Button state: %s", self.button_state)
                 pressed.append(x)
+            self.button_state[x] = val
         return pressed
 
     def button_event(self, button):
