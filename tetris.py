@@ -104,7 +104,11 @@ def show_board(board, shape=[], shape_x=0, shape_y=0):
 def rotate_shape(shape):
     return [ [ shape[y][x]
 		for y in range(len(shape)) ]
-		for x in range(len(shape[0]) - 1, -1, -1) ]
+        for x in range(len(shape[0]) - 1, -1, -1) ]
+
+def remove_row(board, row):
+    del board[row]
+    return [[0 for i in range(width)]] + board
 
 
 class Tetris():
@@ -142,8 +146,7 @@ class Tetris():
             self.shape_pos_y += 1
             self.stick_shape()
             self.new_shape()
-        else:
-            show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
+        show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
 
 
     def stick_shape(self):
@@ -151,7 +154,16 @@ class Tetris():
         for shape_y, shape_row in enumerate(self.shape):
             for shape_x, shape_cell in enumerate(shape_row):
                 self.board[shape_y + self.shape_pos_y][shape_x + self.shape_pos_x] += shape_cell
+        self.check_full_lines()
 
+    def check_full_lines(self):
+        while True:
+            for i, row in enumerate(self.board[:-1]):
+                if 0 not in row:
+                    self.board = remove_row(self.board, i)
+                    break
+            else:
+                break
 
     def check_collisions(self):
         """Check the block is not bumping into anything"""
