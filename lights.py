@@ -3,6 +3,7 @@
 
 import time
 from neopixel import *
+import logging as log
 
 led_width = 10
 led_height = 20
@@ -13,6 +14,17 @@ led_freq_hz = 800000
 led_dma = 5
 led_invert = False
 led_brightness = 64
+
+colors = [
+    [0, 0, 0],          # 0 - Black
+    [255, 255, 255],    # 1 - White
+    [255, 0, 0],        # 2 - Red
+    [0, 255, 0],        # 3 - Green
+    [0, 0, 255],        # 4 - Blue
+    [255, 128, 0],      # 5 - Orange
+    [255, 0, 255],      # 6 - Purple
+    [0, 255, 255],      # 7 - Cyan
+]
 
 def strip_pos_to_board(led_num):
     xpos = int(led_num % led_height)
@@ -31,8 +43,13 @@ class Board(object):
         """Show a board on the lights"""
         for led in range(led_count -1):
             xpos, ypos = strip_pos_to_board(led)
-            color = Color(board[xpos][ypos]*10, 0, 0 )
-            self.strip.setPixelColor(led, color)
+            try:
+                led_rgb = colors[board[xpos][ypos]]
+            except IndexError:
+                log.error("Ivalid color ID %s", board[xpos][ypos])
+                led_rgb = [255, 255, 255]
+            led_color = Color(led_rgb)
+            self.strip.setPixelColor(led, led_color)
         self.strip.show()
 
 
