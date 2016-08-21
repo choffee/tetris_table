@@ -130,6 +130,7 @@ class Tetris():
         self.button_state = [True] * 8
         self.ended = False
         self.score = 0
+        self.lines_dropped = 0
 
     def new_shape(self):
         """Select a new shape and position it"""
@@ -179,10 +180,13 @@ class Tetris():
                 if 0 not in row:
                     self.board = remove_row(self.board, i)
                     lines_closed += 1
+                    self.lines_dropped += 1
                     break
             else:
                 break
         self.score += 100 * (lines_closed * lines_closed)
+        if self.lines_dropped > 0 and self.lines_dropped % 10 == 0:
+            self.drop_interval -= 100
 
     def check_collisions(self):
         """Check the block is not bumping into anything"""
@@ -287,6 +291,7 @@ class Tetris():
         if self.ended:
            print("Thanks for playing")
            print("Score: ", self.score)
+           print("You cleared ", self.lines_dropped, " lines")
 
 
 
