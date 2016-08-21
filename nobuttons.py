@@ -9,10 +9,11 @@ class Buttons(object):
         self.last_key = time.time()
 
     def get_buttons(self):
+        return []
+        """ Used to return random buttons """
         if time.time() - self.last_key > 1:
             buttons = [True, True, True, True, True, True, True, True]
             log.debug("Random Button time")
             self.last_key = time.time()
             buttons[random.randrange(4,8)] = False
             return buttons
-        return []

@@ -243,6 +243,13 @@ class Tetris():
                     for button in self.buttons_pressed(controls.get_buttons()):
                         log.debug("Button pressed %s", button)
                         self.button_event(button)
+                if event.type == KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        self.move_left()
+                    if event.key == pygame.K_RIGHT:
+                        self.move_right()
+                    if event.key == pygame.K_UP:
+                        self.rotate()
 
 
 def main():
