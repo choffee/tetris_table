@@ -22,8 +22,6 @@ class Board(object):
     def show_board(self, board):
         for line_no, line in enumerate(board):
             for cell_no, cell in enumerate(line):
-                print(make_square(line_no, cell_no))
                 pygame.draw.rect(self.screen, make_color(cell), make_square(cell_no, line_no))
 
-        pygame.draw.rect(self.screen, (255, 255, 255), (0, 0, 10, 10))
         pygame.display.update()
