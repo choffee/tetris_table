@@ -140,12 +140,15 @@ class Tetris():
         self.last_drop_time = pygame.time.get_ticks()
         self.shape_pos_y -= 1
         print(self.shape_pos_y)
+        hit = False
         if self.check_collisions():
             log.debug('Collided %s', self.shape_pos_y)
             self.shape_pos_y += 1
             self.stick_shape()
             self.new_shape()
+            hit = True
         show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
+        return hit
 
     def stick_shape(self):
         """Stick the shape on the board"""
@@ -202,6 +205,8 @@ class Tetris():
             self.move_right()
         elif button == 5:
             self.rotate()
+        elif button == 6:
+            self.quick_drop()
 
     def move_right(self):
         """Move the shape right"""
@@ -226,6 +231,11 @@ class Tetris():
         log.debug("Shape rotating")
         if self.check_collisions():
             self.shape = rotate_shape(self.shape)
+
+    def quick_drop(self):
+        while not self.make_drop():
+            pass
+
 
     def run(self):
         """Run the game"""
@@ -256,6 +266,10 @@ class Tetris():
                         self.move_right()
                     if event.key == pygame.K_UP:
                         self.rotate()
+                    if event.key == pygame.K_DOWN:
+                        self.quick_drop()
+                    if event.key == pygame.K_q:
+                        self.running = False
 
 
 def main():
