@@ -107,7 +107,7 @@ def rotate_shape(shape):
 
 def remove_row(board, row):
     del board[row]
-    return [[0 for i in range(width)]] + board
+    return board + [[0 for i in range(width)]]
 
 
 class Tetris():
