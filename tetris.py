@@ -126,8 +126,8 @@ class Tetris():
     def new_shape(self):
         """Select a new shape and position it"""
         self.shape = shapes[randrange(len(shapes))]
-        self.shape_pos_x = randrange(width - len(self.shape))
-        self.shape_pos_y = 20 - len(self.shape[0])
+        self.shape_pos_x = randrange(width - len(self.shape[0]))
+        self.shape_pos_y = 20 - len(self.shape)
         self.last_drop_time = pygame.time.get_ticks()
 
     def time_till_next_drop(self):
