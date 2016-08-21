@@ -210,7 +210,7 @@ class Tetris():
 
     def move_right(self):
         """Move the shape right"""
-        if self.shape_pos_x + len(self.shape) < width:
+        if self.shape_pos_x + len(self.shape[0]) < width:
             self.shape_pos_x += 1
             if self.check_collisions():
                 self.shape_pos_x -= 1
