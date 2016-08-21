@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import pygame
 from bitcolors import colors
+import logging as log
 
 MAX_X=424
 MAX_Y=600
@@ -11,7 +12,12 @@ def make_square(x, y):
     return (x * b_size + 1, MAX_Y - (y + 1) * b_size - 2, b_size, b_size)
 
 def make_color(num):
-    return colors[num]
+    col = [0, 0, 0]
+    try:
+        col = colors[num]
+    except IndexError:
+        log.error("Wrong color: %s", num)
+    return col
 
 class Board(object):
     def __init__(self):
