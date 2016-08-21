@@ -129,6 +129,7 @@ class Tetris():
         self.new_shape()
         self.button_state = [True] * 8
         self.ended = False
+        self.score = 0
 
     def new_shape(self):
         """Select a new shape and position it"""
@@ -172,13 +173,16 @@ class Tetris():
         self.check_full_lines()
 
     def check_full_lines(self):
+        lines_closed=0
         while True:
             for i, row in enumerate(self.board[:-1]):
                 if 0 not in row:
                     self.board = remove_row(self.board, i)
+                    lines_closed += 1
                     break
             else:
                 break
+        self.score += 100 * (lines_closed * lines_closed)
 
     def check_collisions(self):
         """Check the block is not bumping into anything"""
@@ -281,7 +285,8 @@ class Tetris():
                     if event.key == pygame.K_q:
                         self.running = False
         if self.ended:
-            print("Thanks for playing")
+           print("Thanks for playing")
+           print("Score: ", self.score)
 
 
 
