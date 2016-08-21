@@ -84,16 +84,20 @@ def drop_shape(board, shape, xpos, ypos):
         return board
 
 light_board = lights.Board()
+
+
 def show_board(board, shape=[], shape_x=0, shape_y=0):
     """Display the board"""
     for line in drop_shape(board, shape, shape_x, shape_y):
         print(line)
     light_board.show_board(drop_shape(board, shape, shape_x, shape_y))
 
+
 def rotate_shape(shape):
-    return [ [ shape[y][x]
-		for y in range(len(shape)) ]
-        for x in range(len(shape[0]) - 1, -1, -1) ]
+    return [[shape[y][x]
+             for y in range(len(shape))]
+            for x in range(len(shape[0]) - 1, -1, -1)]
+
 
 def remove_row(board, row):
     del board[row]
@@ -106,7 +110,7 @@ class Tetris():
         self.board = new_board()
         self.running = False
         self.clock = pygame.time.Clock()
-        self.drop_interval = 1000 # 1 second
+        self.drop_interval = 1000  # 1 second
         self.shape_pos_y = 0
         self.shape_pos_x = 0
         self.last_drop_time = pygame.time.get_ticks()
@@ -136,7 +140,6 @@ class Tetris():
             self.stick_shape()
             self.new_shape()
         show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
-
 
     def stick_shape(self):
         """Stick the shape on the board"""
@@ -180,7 +183,7 @@ class Tetris():
         pressed = []
         # log.debug("Buttons pressed %s", new_values)
         for x, val in enumerate(new_values):
-            if val == False  and self.button_state[x] == True:
+            if not val and self.button_state[x]:
                 log.debug("Button state: %s", self.button_state)
                 pressed.append(x)
             self.button_state[x] = val
@@ -199,19 +202,18 @@ class Tetris():
         if self.shape_pos_x + len(self.shape) < width:
             self.shape_pos_x += 1
             if self.check_collisions():
-              self.shape_pos_x -= 1
+                self.shape_pos_x -= 1
             else:
-              show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
+                show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
 
     def move_left(self):
         """Move the shape right"""
         if self.shape_pos_x > 0:
             self.shape_pos_x -= 1
             if self.check_collisions():
-              self.shape_pos_x += 1
+                self.shape_pos_x += 1
             else:
-              show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
-
+                show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
 
     def rotate(self):
         self.shape = rotate_shape(self.shape)
@@ -223,13 +225,13 @@ class Tetris():
         """Run the game"""
         print("Run the game")
         pygame.display.init()
-        #button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
+        # button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
         controls = buttons.Buttons()
         show_board(self.board)
         print(self.shape)
         self.running = True
-        pygame.time.set_timer(USEREVENT, 100) # every 100 miliseconds
-        pygame.time.set_timer(USEREVENT+1, 10) # every 10 milliseconds
+        pygame.time.set_timer(USEREVENT, 100)  # every 100 miliseconds
+        pygame.time.set_timer(USEREVENT+1, 10)  # every 10 milliseconds
         while self.running:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -241,6 +243,7 @@ class Tetris():
                     for button in self.buttons_pressed(controls.get_buttons()):
                         log.debug("Button pressed %s", button)
                         self.button_event(button)
+
 
 def main():
     """Start the main game"""
