@@ -39,8 +39,8 @@ else:
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-width = 10
-height = 20
+board_width = 10
+board_height = 20
 
 BUTTONEVENT = USEREVENT+1
 
@@ -63,18 +63,24 @@ shapes = [
 def new_board():
     board = []
     # XXX replace with clever map
-    for y in range(height):
+    for y in range(board_height):
         board.append([])
-        for x in range(width):
+        for x in range(board_width):
             board[y].append(0)
     return board
+
+def shape_width(shape):
+    return(len(shape[0]))
+
+def shape_height(shape):
+    return(len(shape))
 
 def drop_shape(board, shape, xpos, ypos):
     """Drop a shape into a board"""
     if len(shape) > 0:
         this_board = []
-        shape_x_max = xpos + len(shape[0])
-        shape_y_max = ypos + len(shape)
+        shape_x_max = xpos + shape_width(shape)
+        shape_y_max = ypos + shape_height(shape)
         for board_y, board_line in enumerate(board):
             line = []
             for board_x, cell in enumerate(board_line):
@@ -101,13 +107,13 @@ def show_board(board, shape=[], shape_x=0, shape_y=0):
 
 def rotate_shape(shape):
     return [[shape[y][x]
-             for y in range(len(shape))]
-            for x in range(len(shape[0]) - 1, -1, -1)]
+             for y in range(shape_height(shape))]
+            for x in range(shape_width(shape) - 1, -1, -1)]
 
 
 def remove_row(board, row):
     del board[row]
-    return board + [[0 for i in range(width)]]
+    return board + [[0 for i in range(board_width)]]
 
 
 class Tetris():
@@ -122,12 +128,16 @@ class Tetris():
         self.last_drop_time = pygame.time.get_ticks()
         self.new_shape()
         self.button_state = [True] * 8
+        self.ended = False
 
     def new_shape(self):
         """Select a new shape and position it"""
         self.shape = shapes[randrange(len(shapes))]
-        self.shape_pos_x = randrange(width - len(self.shape[0]))
-        self.shape_pos_y = 20 - len(self.shape)
+        self.shape_pos_x = randrange(board_width - shape_width(self.shape))
+        self.shape_pos_y = board_height - shape_height(self.shape)
+        if self.check_collisions():
+            log.debug("End of Game...")
+            self.ended = True
         self.last_drop_time = pygame.time.get_ticks()
 
     def time_till_next_drop(self):
@@ -210,7 +220,7 @@ class Tetris():
 
     def move_right(self):
         """Move the shape right"""
-        if self.shape_pos_x + len(self.shape[0]) < width:
+        if self.shape_pos_x + len(self.shape[0]) < board_width:
             self.shape_pos_x += 1
             if self.check_collisions():
                 self.shape_pos_x -= 1
@@ -248,7 +258,7 @@ class Tetris():
         self.running = True
         pygame.time.set_timer(USEREVENT, 100)  # every 100 miliseconds
         pygame.time.set_timer(USEREVENT+1, 10)  # every 10 milliseconds
-        while self.running:
+        while self.running and not self.ended:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.running = False
@@ -270,6 +280,9 @@ class Tetris():
                         self.quick_drop()
                     if event.key == pygame.K_q:
                         self.running = False
+        if self.ended:
+            print("Thanks for playing")
+
 
 
 def main():
