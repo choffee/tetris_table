@@ -251,6 +251,11 @@ class Tetris():
         log.debug("Shape rotating")
         if self.check_collisions():
             self.shape = rotate_shape(self.shape)
+            self.shape = rotate_shape(self.shape)
+            self.shape = rotate_shape(self.shape)
+        else:
+            show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
+
 
     def quick_drop(self):
         while not self.make_drop():
