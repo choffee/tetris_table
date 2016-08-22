@@ -274,27 +274,27 @@ class Tetris():
         pygame.time.set_timer(USEREVENT, 100)  # every 100 miliseconds
         pygame.time.set_timer(USEREVENT+1, 10)  # every 10 milliseconds
         while self.running and not self.ended:
-            for event in pygame.event.get():
-                if event.type == QUIT:
+            event = pygame.event.wait()
+            if event.type == QUIT:
+                self.running = False
+            if event.type == USEREVENT:
+                if self.time_till_next_drop() < 0:
+                    self.make_drop()
+            if event.type == USEREVENT+1:
+                for button in self.buttons_pressed(controls.get_buttons()):
+                    log.debug("Button pressed %s", button)
+                    self.button_event(button)
+            if event.type == KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self.move_left()
+                if event.key == pygame.K_RIGHT:
+                    self.move_right()
+                if event.key == pygame.K_UP:
+                    self.rotate()
+                if event.key == pygame.K_DOWN:
+                    self.quick_drop()
+                if event.key == pygame.K_q:
                     self.running = False
-                if event.type == USEREVENT:
-                    if self.time_till_next_drop() < 0:
-                        self.make_drop()
-                if event.type == USEREVENT+1:
-                    for button in self.buttons_pressed(controls.get_buttons()):
-                        log.debug("Button pressed %s", button)
-                        self.button_event(button)
-                if event.type == KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        self.move_left()
-                    if event.key == pygame.K_RIGHT:
-                        self.move_right()
-                    if event.key == pygame.K_UP:
-                        self.rotate()
-                    if event.key == pygame.K_DOWN:
-                        self.quick_drop()
-                    if event.key == pygame.K_q:
-                        self.running = False
         if self.ended:
            print("Thanks for playing")
            print("Score: ", self.score)
