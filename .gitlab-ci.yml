@@ -1,6 +1,5 @@
 image: python:3.5
 before_script:
-    - apt-get install -y python3 pip3
     - pip3 install -r requirements.txt
 
 
