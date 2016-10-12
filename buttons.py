@@ -13,7 +13,7 @@ class Buttons(object):
         self.buttons = mcs.MCP23008(i2c_address)
         for i in range(8):
             self.buttons.setup(i, GPIO.IN)
-            self.buttons.pullup(i, True)
+            self.buttons.pullup(i, 1)
 
     def add_callback(self, callback):
         # Setup interupt
