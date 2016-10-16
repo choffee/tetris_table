@@ -25,7 +25,7 @@ import os
 from pygame.locals import *
 from pygame.color import *
 
-if os.getenv('PI') == 1:
+if os.getenv('PI') != 1:
     os.putenv('SDL_FBDEV', '/dev/fb0')
     os.putenv('SDL_VIDEODRIVER', 'fbcons')
     os.putenv('SDL_NOMOUSE', '1')
