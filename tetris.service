@@ -1,0 +1,14 @@
+[Unit]
+Description="Testris Table Game"
+
+[Service]
+Type=idle
+WorkingDirectory=/home/pi/tetris_table
+ExecStartPre=-/usr/bin/python3 /home/pi/tetris_table/lights.py
+ExecStart=/usr/bin/python3 /home/pi/tetris_table/tetris.py
+#Restart=always
+#RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
