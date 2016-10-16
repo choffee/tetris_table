@@ -13,7 +13,7 @@ class Buttons(object):
         self.buttons = mcs.MCP23008(i2c_address)
         for i in range(8):
             self.buttons.setup(i, GPIO.IN)
-            self.buttons.pullup(i, 1)
+            # self.buttons.pullup(i, True)
 
     def add_callback(self, callback):
         # Setup interupt
@@ -24,13 +24,7 @@ class Buttons(object):
          
 
     def get_buttons(self):
-        # Hack for broken buttons
-        pins = self.buttons.input_pins(range(8))
-        if pins == [True, True, True, True, False, False, False, True]:
-            pins = [True, True, True, True, True, False, True, True]
-        elif pins == [True, True, True, True, False, False, True, True]:
-            pins = [True, True, True, True, False, True, True, True]
-        return pins
+        return self.buttons.input_pins(range(8))
 
 if __name__ == "__main__":
     butts = Buttons()
