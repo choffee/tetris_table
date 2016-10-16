@@ -48,7 +48,7 @@ class Board(object):
             except IndexError:
                 log.error("Ivalid color ID %s", board[xpos][ypos])
                 led_rgb = [255, 255, 255]
-            led_color = Color(led_rgb)
+            led_color = Color(led_rgb[0], led_rgb[1], led_rgb[2])
             self.strip.setPixelColor(led, led_color)
         self.strip.show()
 
