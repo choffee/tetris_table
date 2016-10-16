@@ -25,6 +25,12 @@ import os
 from pygame.locals import *
 from pygame.color import *
 
+import signal
+def handler(signum, frame):
+    pass
+
+signal.signal(signal.SIGHUP, handler)
+
 if os.getenv('PI') != 1:
     os.putenv('SDL_FBDEV', '/dev/fb0')
     os.putenv('SDL_VIDEODRIVER', 'fbcons')
