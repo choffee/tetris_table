@@ -67,6 +67,7 @@ shapes = [
      [8, 8, 0]],
 ]
 
+
 def new_board():
     board = []
     # XXX replace with clever map
@@ -272,6 +273,9 @@ class Tetris():
         print("Run the game")
         pygame.display.init()
         # button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
+        pygame.mixer.init()
+        pygame.mixer.music.load('tetris.mp3')
+        pygame.mixer.music.play(-1, 0.0)
         controls = buttons.Buttons()
         show_board(self.board)
         print(self.shape)
