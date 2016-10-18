@@ -6,6 +6,7 @@ import logging as log
 MAX_X=424
 MAX_Y=600
 BLOCK_SIZE=20
+BOARD_HEIGHT=20
 
 def make_square(x, y):
     b_size = BLOCK_SIZE
@@ -27,6 +28,8 @@ class Board(object):
 
     def show_board(self, board):
         for line_no, line in enumerate(board):
+            if line_no > BOARD_HEIGHT:
+                break
             for cell_no, cell in enumerate(line):
                 pygame.draw.rect(self.screen, make_color(cell), make_square(cell_no, line_no))
 

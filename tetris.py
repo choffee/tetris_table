@@ -46,7 +46,8 @@ log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
 board_width = 10
-board_height = 20
+board_height_hidden = 2
+board_height = 20 + board_height_hidden
 
 BUTTONEVENT = USEREVENT+1
 
@@ -144,7 +145,7 @@ class Tetris():
         """Select a new shape and position it"""
         self.shape = shapes[randrange(len(shapes))]
         self.shape_pos_x = randrange(board_width - shape_width(self.shape))
-        self.shape_pos_y = board_height - shape_height(self.shape)
+        self.shape_pos_y = board_height - shape_height(self.shape) - board_height_hidden
         if self.check_collisions():
             log.debug("End of Game...")
             self.ended = True
@@ -262,11 +263,9 @@ class Tetris():
         else:
             show_board(self.board, self.shape, self.shape_pos_x, self.shape_pos_y)
 
-
     def quick_drop(self):
         while not self.make_drop():
             pass
-
 
     def run(self):
         """Run the game"""
@@ -302,10 +301,9 @@ class Tetris():
                 if event.key == pygame.K_q:
                     self.running = False
         if self.ended:
-           print("Thanks for playing")
-           print("Score: ", self.score)
-           print("You cleared ", self.lines_dropped, " lines")
-
+            print("Thanks for playing")
+            print("Score: ", self.score)
+            print("You cleared ", self.lines_dropped, " lines")
 
 
 def main():
