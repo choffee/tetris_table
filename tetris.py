@@ -31,7 +31,7 @@ def handler(signum, frame):
 
 signal.signal(signal.SIGHUP, handler)
 
-if os.getenv('PI') != 1:
+if os.getenv('TETRIS_EMU') != "TRUE":
     os.putenv('SDL_FBDEV', '/dev/fb0')
     os.putenv('SDL_VIDEODRIVER', 'fbcons')
     os.putenv('SDL_NOMOUSE', '1')
