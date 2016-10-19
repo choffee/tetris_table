@@ -200,8 +200,8 @@ class Tetris():
                 self.row_sound.play()
             except:
                 pass
-        if self.lines_dropped > 0 and self.lines_dropped % 10 == 0:
-            self.drop_interval -= 100
+            if self.lines_dropped > 0 and self.lines_dropped % 10 == 0:
+                self.drop_interval -= 100
 
     def check_collisions(self):
         """Check the block is not bumping into anything"""
