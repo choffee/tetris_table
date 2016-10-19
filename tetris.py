@@ -196,7 +196,10 @@ class Tetris():
                 break
         self.score += 100 * (lines_closed * lines_closed)
         if lines_closed > 0:
-            self.row_sound.play()
+            try:
+                self.row_sound.play()
+            except:
+                pass
         if self.lines_dropped > 0 and self.lines_dropped % 10 == 0:
             self.drop_interval -= 100
 
@@ -276,9 +279,13 @@ class Tetris():
         pygame.display.init()
         pygame.init()
         # button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
-        background_sound = pygame.mixer.Sound("./tetris.ogg")
-        background_sound.play(loops = -1)
-        self.row_sound = pygame.mixer.Sound("./jump.wav")
+        try:
+            background_sound = pygame.mixer.Sound("./tetris.ogg")
+            background_sound.play(loops = -1)
+            self.row_sound = pygame.mixer.Sound("./jump.wav")
+        except:
+            pass
+       
         controls = buttons.Buttons()
         show_board(self.board)
         print(self.shape)
