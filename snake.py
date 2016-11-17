@@ -118,6 +118,7 @@ class Snake():
             return False
         if next_seg == self.target:
             log.debug('Target got: %s', next_seg)
+            self.row_sound.play()
             self.new_target()
             self.grow_count += 3
             self.score += 1
