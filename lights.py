@@ -42,7 +42,7 @@ class Board(object):
 
     def show_board(self, board):
         """Show a board on the lights"""
-        for led in range(led_count - 1):
+        for led in range(led_count):
             xpos, ypos = strip_pos_to_board(led)
             try:
                 led_rgb = colors[board[xpos][ypos]]
