@@ -49,6 +49,8 @@ logging.basicConfig(level=logging.DEBUG)
 board_width = 10
 board_height = 20
 
+levelup_length = 20
+
 BUTTONEVENT = USEREVENT+1
 
 MOVE_L, MOVE_R, MOVE_U, MOVE_D = [[-1,0], [1,0], [0,1], [0,-1]]
@@ -73,20 +75,25 @@ def show_board(board):
 class Snake():
     """The snake game"""
     def __init__(self):
-        self.board = new_board()
         self.running = False
         self.clock = pygame.time.Clock()
+        self.button_state = [True] * 8
         self.move_interval = 500  # 0.5 second
+        self.new_level()
+        self.ended = False
+        self.score = 0
+        self.level = 1
+        self.lives = 3
+
+    def new_level(self):
+        """Reset the level"""
+        self.board = new_board()
         self.grow_count    = 2    # 3 blocks long to start
         self.snake_segments = [[board_width / 2, board_height / 2]]
         self.move_vector = [1,0]
         self.next_move_vector = False
         self.last_tick = pygame.time.get_ticks()
         self.new_target()
-        self.button_state = [True] * 8
-        self.ended = False
-        self.score = 0
-        self.lines_dropped = 0
 
     def new_target(self):
         """Select a new target position """
@@ -119,9 +126,16 @@ class Snake():
         if next_seg == self.target:
             log.debug('Target got: %s', next_seg)
             self.row_sound.play()
-            self.new_target()
-            self.grow_count += 3
             self.score += 1
+            if len(self.snake_segments) > levelup_length:
+                self.new_level()
+                log.debug('Level %s complete - score: %s', self.level, self.score)
+                self.level += 1
+                self.move_interval *= 0.8
+                return True
+            else:
+                self.new_target()
+                self.grow_count += 3
         if self.board[next_seg[1]][next_seg[0]] in [COL_SNAKE, COL_WALL]:
             log.debug('Collision at: %s', next_seg)
             return False
@@ -184,7 +198,16 @@ class Snake():
                 self.running = False
             if event.type == USEREVENT:
                 if self.time_till_next_drop() < 0:
-                    self.move_snake()
+                    if not self.move_snake():
+                        self.lives -= 1
+                        log.debug('Player died!  Lives remaining: %s', self.lives)
+                        # death_sound.play()
+                        if self.lives <= 0:
+                            log.debug('Game over')
+                            self.ended = True
+                        else:
+                            # TODO: "Ready?" Message
+                            self.new_level()
             if event.type == USEREVENT+1:
                 for button in self.buttons_pressed(controls.get_buttons()):
                     log.debug("Button pressed %s", button)
@@ -202,6 +225,7 @@ class Snake():
                     self.running = False
         if self.ended:
             print("Thanks for playing")
+            print("Level: ", self.level)
             print("Score: ", self.score)
 
 
