@@ -232,13 +232,13 @@ class Tetris():
         return pressed
 
     def button_event(self, button):
-        if button == 4:
+        if button == 1: # 4
             self.move_left()
-        elif button == 7:
+        elif button == 3: # 7
             self.move_right()
-        elif button == 5:
+        elif button == 2: # 5
             self.rotate()
-        elif button == 6:
+        elif button == 0: # 6
             self.quick_drop()
 
     def move_right(self):
