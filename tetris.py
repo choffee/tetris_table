@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
     This is a game of "snake" for John's tetris table.
     Copyright John Cooper - 2016
@@ -89,7 +89,7 @@ class Snake():
         """Reset the level"""
         self.board = new_board()
         self.grow_count    = 2    # 3 blocks long to start
-        self.snake_segments = [[board_width / 2, board_height / 2]]
+        self.snake_segments = [[int(board_width / 2), int(board_height / 2)]]
         self.move_vector = [1,0]
         self.next_move_vector = False
         self.last_tick = pygame.time.get_ticks()
@@ -110,7 +110,7 @@ class Snake():
 
     def set_direction(self, vector):
         if vector[0] == -self.move_vector[0] and vector[1] == -self.move_vector[1]:
-            print "Supress backward movement"
+            print ("Supress backward movement")
         elif not self.next_move_vector:
             self.move_vector = vector
         self.next_move_vector = vector
@@ -118,7 +118,7 @@ class Snake():
     def move_snake(self):
         """Move the snake one block"""
         self.last_tick = pygame.time.get_ticks()
-        next_seg = map(add, self.snake_segments[0], self.move_vector)
+        next_seg = list(map(add, self.snake_segments[0], self.move_vector))
         print(next_seg)
         if next_seg[0] not in range(board_width) or next_seg[1] not in range(board_height):
             log.debug('Out of play: %s', next_seg)
