@@ -30,7 +30,7 @@ colors = [
 def strip_pos_to_board(led_num):
     xpos = int(led_num % led_height)
     ypos = int(led_num / led_height)
-    if ypos % 2 != 0:
+    if ypos % 2 == 0:
         xpos = led_height - xpos -1
     return (xpos, ypos)
 
@@ -42,7 +42,7 @@ class Board(object):
 
     def show_board(self, board):
         """Show a board on the lights"""
-        for led in range(led_count - 1):
+        for led in range(led_count):
             xpos, ypos = strip_pos_to_board(led)
             try:
                 led_rgb = colors[board[xpos][ypos]]
