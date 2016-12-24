@@ -2,6 +2,13 @@
 Try an keep to http://keepachangelog.com/en/0.3.0/ format
 
 ## [Unreleased]
+
+## [0.0.2] - 2016-12-24
+### Fixed
+- Fixed L shape
+### Added
+- First working release
+- Made buttons work
 - Added requirements.txt
 - Started writing some tests
 
