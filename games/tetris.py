@@ -19,6 +19,7 @@
 
 from random import randrange
 
+import copy
 import logging
 import pygame
 from pygame.locals import *
@@ -57,6 +58,9 @@ def shape_height(shape):
 
 def drop_shape(board, shape, xpos, ypos):
     """Drop a shape into a board"""
+    # This feels ugly, get rid of the deep copy
+    # when this moves into the board class
+    this_board = copy.deepcopy(board)
     if len(shape) > 0:
         this_pixels = []
         shape_x_max = xpos + shape_width(shape)
@@ -73,16 +77,16 @@ def drop_shape(board, shape, xpos, ypos):
                 else:
                     line.append(cell)
             this_pixels.append(line)
-        board['pixels'] = this_pixels
-    return board
+        this_board['pixels'] = this_pixels
+    return this_board
 
 
 def show_board_and_shape(board, light_board, shape=None, shape_x=0, shape_y=0):
     """Display the board"""
     if shape is None:
         shape = []
-    for line in drop_shape(board, shape, shape_x, shape_y):
-        log.debug("show_bard_and_shape, line: %s", line)
+    for line in drop_shape(board, shape, shape_x, shape_y)['pixels']:
+        log.debug("show_board_and_shape, line: %s", line)
     light_board.show_board(drop_shape(board, shape, shape_x, shape_y))
 
 
@@ -93,8 +97,9 @@ def rotate_shape(shape):
 
 
 def remove_row(board, row):
+    log.debug("remove_row, Removing row: %s", row)
     del board['pixels'][row]
-    return board['pixels'] + [[0 for i in range(board['width'])]]
+    board['pixels'] += [[0 for i in range(board['width'])]]
 
 
 class Tetris():
@@ -147,6 +152,7 @@ class Tetris():
 
     def stick_shape(self):
         """Stick the shape on the board"""
+        log.debug("stick_shape, Sticking shape")
         for shape_y, shape_row in enumerate(self.shape):
             for shape_x, shape_cell in enumerate(shape_row):
                 try:
@@ -161,7 +167,7 @@ class Tetris():
         while True:
             for i, row in enumerate(self.board['pixels'][:-1]):
                 if 0 not in row:
-                    self.board = remove_row(self.board, i)
+                    remove_row(self.board, i)
                     lines_closed += 1
                     self.lines_dropped += 1
                     break
