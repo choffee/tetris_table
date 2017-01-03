@@ -259,9 +259,9 @@ class Tetris():
         pygame.init()
         # button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
         try:
-            background_sound = pygame.mixer.Sound("./tetris.ogg")
+            background_sound = pygame.mixer.Sound("./sounds/tetris.ogg")
             background_sound.play( loops=-1 )
-            self.row_sound = pygame.mixer.Sound("./jump.wav")
+            self.row_sound = pygame.mixer.Sound("./sounds/jump.wav")
         except:
             log.debug("run, Failed to play sound: tetris.ogg")
 
