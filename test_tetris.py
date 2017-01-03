@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import tetris
+from games import tetris
 import pytest
 
 
