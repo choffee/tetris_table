@@ -45,9 +45,9 @@ class Board(object):
         for led in range(led_count):
             xpos, ypos = strip_pos_to_board(led)
             try:
-                led_rgb = colors[board[xpos][ypos]]
+                led_rgb = colors[board['pixels'][xpos][ypos]]
             except IndexError:
-                log.error("Ivalid color ID %s", board[xpos][ypos])
+                log.error("Ivalid color ID %s", board['pixels'][xpos][ypos])
                 led_rgb = [255, 255, 255]
             led_color = Color(led_rgb[0], led_rgb[1], led_rgb[2])
             self.strip.setPixelColor(led, led_color)
