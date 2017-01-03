@@ -22,11 +22,11 @@ from random import randrange
 import logging
 import pygame
 from pygame.locals import *
+from pygame.locals import USEREVENT
 from pygame.color import *
 
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 BUTTONEVENT = USEREVENT+1
 
@@ -47,12 +47,13 @@ shapes = [
 ]
 
 
-
 def shape_width(shape):
     return(len(shape[0]))
 
+
 def shape_height(shape):
     return(len(shape))
+
 
 def drop_shape(board, shape, xpos, ypos):
     """Drop a shape into a board"""
@@ -65,20 +66,23 @@ def drop_shape(board, shape, xpos, ypos):
             for board_x, cell in enumerate(board_line):
                 if board_x >= xpos and board_x < shape_x_max and \
                         board_y >= ypos and board_y < shape_y_max:
-                    log.debug("shape_pos: y:%s, x:%s", board_y - ypos, board_x - xpos)
-                    line.append(cell + shape[board_y - ypos][board_x - xpos])
+                    y = board_y - ypos
+                    x = board_x - xpos
+                    log.debug("drop_shape, shape_pos: y:%s, x:%s", y, x)
+                    line.append(cell + shape[y][x])
                 else:
                     line.append(cell)
             this_pixels.append(line)
         board['pixels'] = this_pixels
     return board
 
+
 def show_board_and_shape(board, light_board, shape=None, shape_x=0, shape_y=0):
     """Display the board"""
     if shape is None:
         shape = []
     for line in drop_shape(board, shape, shape_x, shape_y):
-        print(line)
+        log.debug("show_bard_and_shape, line: %s", line)
     light_board.show_board(drop_shape(board, shape, shape_x, shape_y))
 
 
@@ -130,10 +134,10 @@ class Tetris():
         """Move the shape down one"""
         self.last_drop_time = pygame.time.get_ticks()
         self.shape_pos_y -= 1
-        print(self.shape_pos_y)
+        log.debug("make_drop, shape_pos_y: %s", self.shape_pos_y)
         hit = False
         if self.check_collisions():
-            log.debug('Collided %s', self.shape_pos_y)
+            log.debug('make_drop, Collided shape_pos_y: %s', self.shape_pos_y)
             self.shape_pos_y += 1
             self.stick_shape()
             self.new_shape()
@@ -148,7 +152,7 @@ class Tetris():
                 try:
                     self.board['pixels'][shape_y + self.shape_pos_y][shape_x + self.shape_pos_x] += shape_cell
                 except:
-                    log.error("Dropping shape:x-%s, y-%s, %s, %s", shape_x, shape_y, self.shape_pos_x, self.shape_pos_y)
+                    log.error("stick_shape, Dropping shape:x-%s, y-%s, %s, %s", shape_x, shape_y, self.shape_pos_x, self.shape_pos_y)
 
         self.check_full_lines()
 
@@ -174,19 +178,19 @@ class Tetris():
 
     def check_collisions(self):
         """Check the block is not bumping into anything"""
-        print("Checking Collisions")
+        log.info("check_collisions, Checking Collisions")
         for shape_y, shape_row in enumerate(self.shape):
             for shape_x, shape_cell in enumerate(shape_row):
                 x_pos = self.shape_pos_x + shape_x
                 y_pos = self.shape_pos_y + shape_y
-                log.debug('x_check: %s, y_check: %s', x_pos, y_pos)
+                log.debug('check_collisions, x_pos: %s, y_pos: %s', x_pos, y_pos)
                 try:
                     if y_pos < 0 or x_pos < 0:
                         return True
                     if self.board['pixels'][y_pos][x_pos] and shape_cell:
                         return True
                 except IndexError:
-                    log.debug("index error:%s %s", x_pos, y_pos)
+                    log.debug("check_collisions, index error:%s %s", x_pos, y_pos)
                     return True
         return False
 
@@ -195,7 +199,7 @@ class Tetris():
         # log.debug("Buttons pressed %s", new_values)
         for x, val in enumerate(new_values):
             if not val and self.button_state[x]:
-                log.debug("Button state: %s", self.button_state)
+                log.debug("buttons_pressed, Button state: %s", self.button_state)
                 pressed.append(x)
             self.button_state[x] = val
         return pressed
@@ -230,7 +234,7 @@ class Tetris():
 
     def rotate(self):
         self.shape = rotate_shape(self.shape)
-        log.debug("Shape rotating")
+        log.info("rotate, Shape rotating")
         if self.check_collisions():
             self.shape = rotate_shape(self.shape)
             self.shape = rotate_shape(self.shape)
@@ -244,20 +248,20 @@ class Tetris():
 
     def run(self):
         """Run the game"""
-        print("Run the game")
+        log.info("run, Run the game")
         pygame.display.init()
         pygame.init()
         # button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
         try:
             background_sound = pygame.mixer.Sound("./tetris.ogg")
-            background_sound.play(loops = -1)
+            background_sound.play( loops=-1 )
             self.row_sound = pygame.mixer.Sound("./jump.wav")
         except:
-            pass
-       
+            log.debug("run, Failed to play sound: tetris.ogg")
+
         controls = self.buttons
         show_board_and_shape(self.board, self.light_board)
-        print(self.shape)
+        log.debug("run, shape: %s", self.shape)
         self.running = True
         pygame.time.set_timer(USEREVENT, 100)  # every 100 miliseconds
         pygame.time.set_timer(USEREVENT+1, 10)  # every 10 milliseconds
@@ -270,7 +274,7 @@ class Tetris():
                     self.make_drop()
             if event.type == USEREVENT+1:
                 for button in self.buttons_pressed(controls.get_buttons()):
-                    log.debug("Button pressed %s", button)
+                    log.debug("run, Button pressed %s", button)
                     self.button_event(button)
             if event.type == KEYDOWN:
                 if event.key == pygame.K_LEFT:
@@ -293,6 +297,7 @@ def main():
     """Start the main game"""
     game = Tetris()
     game.run()
+
 
 if __name__ == "__main__":
     main()
