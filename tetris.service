@@ -5,7 +5,7 @@ Description="Testris Table Game"
 Type=idle
 WorkingDirectory=/home/pi/tetris_table
 ExecStartPre=-/usr/bin/python3 /home/pi/tetris_table/lights.py
-ExecStart=/usr/bin/python3 /home/pi/tetris_table/tetris.py
+ExecStart=/usr/bin/python3 /home/pi/tetris_table/game.py
 Restart=always
 RestartSec=10
 

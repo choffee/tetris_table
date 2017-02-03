@@ -2,6 +2,19 @@
 Try an keep to http://keepachangelog.com/en/0.3.0/ format
 
 ## [Unreleased]
+### Fixed
+ - Logging in tetris class no longer uses print
+### Added
+ - game.py as master game runner
+ - move tetris.py to games class
+ - convert service to use new game.py
+
+## [0.0.2] - 2016-12-24
+### Fixed
+- Fixed L shape
+### Added
+- First working release
+- Made buttons work
 - Added requirements.txt
 - Started writing some tests
 

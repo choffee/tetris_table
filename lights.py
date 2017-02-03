@@ -30,7 +30,7 @@ colors = [
 def strip_pos_to_board(led_num):
     xpos = int(led_num % led_height)
     ypos = int(led_num / led_height)
-    if ypos % 2 != 0:
+    if ypos % 2 == 0:
         xpos = led_height - xpos -1
     return (xpos, ypos)
 
@@ -42,12 +42,12 @@ class Board(object):
 
     def show_board(self, board):
         """Show a board on the lights"""
-        for led in range(led_count - 1):
+        for led in range(led_count):
             xpos, ypos = strip_pos_to_board(led)
             try:
-                led_rgb = colors[board[xpos][ypos]]
+                led_rgb = colors[board['pixels'][xpos][ypos]]
             except IndexError:
-                log.error("Ivalid color ID %s", board[xpos][ypos])
+                log.error("Ivalid color ID %s", board['pixels'][xpos][ypos])
                 led_rgb = [255, 255, 255]
             led_color = Color(led_rgb[0], led_rgb[1], led_rgb[2])
             self.strip.setPixelColor(led, led_color)
