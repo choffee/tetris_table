@@ -27,7 +27,7 @@ class Board(object):
         pygame.draw.rect(self.screen, (255, 255, 255), (0, top, 10 * BLOCK_SIZE + 2, BLOCK_SIZE * 20 + 2), 1)
 
     def show_board(self, board):
-        for line_no, line in enumerate(board):
+        for line_no, line in enumerate(board['pixels']):
             if line_no > BOARD_HEIGHT:
                 break
             for cell_no, cell in enumerate(line):

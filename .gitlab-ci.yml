@@ -5,4 +5,4 @@ before_script:
 
 nosetests:
     script:
-        - SDL_VIDEODRIVER=dummy nosetests
+        - SDL_VIDEODRIVER=dummy TETRIS_EMU=TRUE nosetests
