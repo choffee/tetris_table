@@ -26,28 +26,8 @@ import os
 from pygame.locals import *
 from pygame.color import *
 
-import signal
-def handler(signum, frame):
-    pass
-
-signal.signal(signal.SIGHUP, handler)
-
-if os.getenv('TETRIS_EMU') != "TRUE":
-    os.putenv('SDL_FBDEV', '/dev/fb0')
-    os.putenv('SDL_VIDEODRIVER', 'fbcons')
-    os.putenv('SDL_NOMOUSE', '1')
-    os.putenv('SDL_NOSOUND', '1')
-    import lights
-    import buttons
-else:
-    import nolights as lights
-    import nobuttons as buttons
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
-
-board_width = 10
-board_height = 20
 
 levelup_length = 20
 
@@ -56,25 +36,10 @@ BUTTONEVENT = USEREVENT+1
 MOVE_L, MOVE_R, MOVE_U, MOVE_D = [[-1,0], [1,0], [0,1], [0,-1]]
 COL_WALL, COL_SNAKE, COL_ERASE, COL_TARGET = [5, 4, 6, 2]
 
-def new_board():
-    board = []
-    # XXX replace with clever map
-    for y in range(board_height):
-        board.append([])
-        for x in range(board_width):
-            board[y].append(0)
-    return board
-
-light_board = lights.Board()
-
-
-def show_board(board):
-    """Display the board"""
-    light_board.show_board(board)
-
 class Snake():
     """The snake game"""
-    def __init__(self):
+    def __init__(self, board, light_board, table_buttons):
+        self.board = board
         self.running = False
         self.clock = pygame.time.Clock()
         self.button_state = [True] * 8
@@ -84,12 +49,13 @@ class Snake():
         self.score = 0
         self.level = 1
         self.lives = 3
+        self.light_board = light_board
+        self.buttons = table_buttons
 
     def new_level(self):
         """Reset the level"""
-        self.board = new_board()
-        self.grow_count    = 2    # 3 blocks long to start
-        self.snake_segments = [[int(board_width / 2), int(board_height / 2)]]
+        self.grow_count = 2    # 3 blocks long to start
+        self.snake_segments = [[int(self.board['width']/ 2), int(self.board['height'] / 2)]]
         self.move_vector = [1,0]
         self.next_move_vector = False
         self.last_tick = pygame.time.get_ticks()
@@ -98,10 +64,10 @@ class Snake():
     def new_target(self):
         """Select a new target position """
         while True:
-            self.target = [ randrange(board_width), randrange(board_height) ]
+            self.target = [ randrange(self.board['width']), randrange(self.board['height']) ]
             if self.target not in self.snake_segments:
                 break
-        self.board[self.target[1]][self.target[0]] = COL_TARGET
+        self.board['pixels'][self.target[1]][self.target[0]] = COL_TARGET
 
     def time_till_next_drop(self):
         """Return number of milliseconds to next move, can be negative"""
@@ -120,7 +86,7 @@ class Snake():
         self.last_tick = pygame.time.get_ticks()
         next_seg = list(map(add, self.snake_segments[0], self.move_vector))
         print(next_seg)
-        if next_seg[0] not in range(board_width) or next_seg[1] not in range(board_height):
+        if next_seg[0] not in range(self.board['width']) or next_seg[1] not in range(self.board['height']):
             log.debug('Out of play: %s', next_seg)
             return False
         if next_seg == self.target:
@@ -136,19 +102,19 @@ class Snake():
             else:
                 self.new_target()
                 self.grow_count += 3
-        if self.board[next_seg[1]][next_seg[0]] in [COL_SNAKE, COL_WALL]:
+        if self.board['pixels'][next_seg[1]][next_seg[0]] in [COL_SNAKE, COL_WALL]:
             log.debug('Collision at: %s', next_seg)
             return False
         # Move the head forward
         self.snake_segments.insert(0, next_seg)
-        self.board[next_seg[1]][next_seg[0]] = COL_SNAKE
+        self.board['pixels'][next_seg[1]][next_seg[0]] = COL_SNAKE
         # Move the tail unless we're extending
         if self.grow_count > 0:
             self.grow_count -= 1
         else:
             erase = self.snake_segments.pop(-1)
-            self.board[erase[1]][erase[0]] = COL_ERASE
-        show_board(self.board)
+            self.board['pixels'][erase[1]][erase[0]] = COL_ERASE
+        self.light_board.show_board(self.board)
         if self.next_move_vector:
             self.move_vector = self.next_move_vector
             self.next_move_vector = False
@@ -182,13 +148,13 @@ class Snake():
         # button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
         try:
             background_sound = pygame.mixer.Sound("./tetris.ogg")
-            background_sound.play(loops = -1)
+            background_sound.play(loops=-1)
             self.row_sound = pygame.mixer.Sound("./jump.wav")
         except:
             pass
-       
-        controls = buttons.Buttons()
-        show_board(self.board)
+
+        controls = self.buttons
+        self.light_board.show_board(self.board)
         self.running = True
         pygame.time.set_timer(USEREVENT, 100)  # every 100 miliseconds
         pygame.time.set_timer(USEREVENT+1, 10)  # every 10 milliseconds
@@ -233,6 +199,7 @@ def main():
     """Start the main game"""
     game = Snake()
     game.run()
+
 
 if __name__ == "__main__":
     main()
