@@ -55,8 +55,9 @@ class Snake():
     def new_level(self):
         """Reset the level"""
         self.grow_count = 2    # 3 blocks long to start
-        self.snake_segments = [[int(self.board['width']/ 2), int(self.board['height'] / 2)]]
-        self.move_vector = [1,0]
+        start_point = [int(self.board['width'] / 2), int(self.board['height'] / 2)]
+        self.snake_segments = [start_point]
+        self.move_vector = [1, 0]
         self.next_move_vector = False
         self.last_tick = pygame.time.get_ticks()
         self.new_target()
