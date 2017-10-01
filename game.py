@@ -60,7 +60,7 @@ board_height = 20 + board_height_hidden
 
 
 def new_board():
-    pixels = [[0] * board_width] * board_height
+    pixels = [[0 for _ in range(board_width)] for _ in range(board_height)]
     return {
         "pixels": pixels,
         "height": board_height,
