@@ -34,12 +34,13 @@ levelup_length = 20
 BUTTONEVENT = USEREVENT+1
 
 MOVE_L, MOVE_R, MOVE_U, MOVE_D = [[-1,0], [1,0], [0,1], [0,-1]]
-COL_WALL, COL_SNAKE, COL_ERASE, COL_TARGET = [5, 4, 6, 2]
+COL_WALL, COL_SNAKE, COL_ERASE, COL_TARGET = [5, 4, 0, 2]
 
 class Snake():
     """The snake game"""
     def __init__(self, board, light_board, table_buttons):
         self.board = board
+        self.board_real_height = board['height'] - board['height_hidden']
         self.running = False
         self.clock = pygame.time.Clock()
         self.button_state = [True] * 8
@@ -54,8 +55,10 @@ class Snake():
 
     def new_level(self):
         """Reset the level"""
+        # Wipe the board, this should be a function of the board class TODO
+        self.board['pixels'] = [[0 for _ in range(self.board['width'])] for _ in range(self.board['height'])]
         self.grow_count = 2    # 3 blocks long to start
-        start_point = [int(self.board['width'] / 2), int(self.board['height'] / 2)]
+        start_point = [int(self.board['width'] / 2), int(self.board_real_height / 2)]
         self.snake_segments = [start_point]
         self.move_vector = [1, 0]
         self.next_move_vector = False
@@ -65,7 +68,7 @@ class Snake():
     def new_target(self):
         """Select a new target position """
         while True:
-            self.target = [ randrange(self.board['width']), randrange(self.board['height']) ]
+            self.target = [ randrange(self.board['width']), randrange(self.board_real_height) ]
             if self.target not in self.snake_segments:
                 break
         self.board['pixels'][self.target[1]][self.target[0]] = COL_TARGET
@@ -88,7 +91,7 @@ class Snake():
         self.last_tick = pygame.time.get_ticks()
         next_seg = list(map(add, self.snake_segments[0], self.move_vector))
         log.debug("Next Segment: %s", next_seg)
-        if next_seg[0] not in range(self.board['width']) or next_seg[1] not in range(self.board['height']):
+        if next_seg[0] not in range(self.board['width']) or next_seg[1] not in range(self.board_real_height):
             log.debug('Out of play: %s', next_seg)
             return False
         if next_seg == self.target:

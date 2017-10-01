@@ -21,6 +21,7 @@ import logging
 import os
 import signal
 from games import tetris
+from games import snake
 
 """
 Handle the fact that systemd sends us a HUP at the start.
@@ -74,7 +75,8 @@ def main():
     light_board = lights.Board()
     board = new_board()
     table_buttons = buttons.Buttons()
-    game = tetris.Tetris(board, light_board, table_buttons)
+    #game = tetris.Tetris(board, light_board, table_buttons)
+    game = snake.Snake(board, light_board, table_buttons)
     game.run()
 
 
