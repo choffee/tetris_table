@@ -59,7 +59,7 @@ LOGO = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-class Snake():
+class Game():
     """The snake game"""
     def __init__(self, board, light_board, table_buttons):
         self.board = board

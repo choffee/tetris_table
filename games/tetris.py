@@ -124,7 +124,7 @@ def remove_row(board, row):
     board['pixels'] += [[0 for i in range(board['width'])]]
 
 
-class Tetris():
+class Game():
     """The testris game"""
     def __init__(self, board, light_board, table_buttons):
         self.board = board
