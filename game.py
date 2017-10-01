@@ -60,12 +60,7 @@ board_height = 20 + board_height_hidden
 
 
 def new_board():
-    pixels = []
-    # XXX replace with clever map
-    for y in range(board_height):
-        pixels.append([])
-        for x in range(board_width):
-            pixels[y].append(0)
+    pixels = [[0 for _ in range(board_width)] for _ in range(board_height)]
     return {
         "pixels": pixels,
         "height": board_height,
