@@ -69,6 +69,7 @@ class Snake():
             if self.target not in self.snake_segments:
                 break
         self.board['pixels'][self.target[1]][self.target[0]] = COL_TARGET
+        log.debug(self.board['pixels'])
 
     def time_till_next_drop(self):
         """Return number of milliseconds to next move, can be negative"""
@@ -77,7 +78,7 @@ class Snake():
 
     def set_direction(self, vector):
         if vector[0] == -self.move_vector[0] and vector[1] == -self.move_vector[1]:
-            print ("Supress backward movement")
+            log.debug("Supress backward movement")
         elif not self.next_move_vector:
             self.move_vector = vector
         self.next_move_vector = vector
@@ -86,7 +87,7 @@ class Snake():
         """Move the snake one block"""
         self.last_tick = pygame.time.get_ticks()
         next_seg = list(map(add, self.snake_segments[0], self.move_vector))
-        print(next_seg)
+        log.debug("Next Segment: %s", next_seg)
         if next_seg[0] not in range(self.board['width']) or next_seg[1] not in range(self.board['height']):
             log.debug('Out of play: %s', next_seg)
             return False
@@ -143,7 +144,7 @@ class Snake():
 
     def run(self):
         """Run the game"""
-        print("Run the game")
+        log.debug("Run the game")
         pygame.display.init()
         pygame.init()
         # button_event = pygame.event.Event(BUTTONEVENT, message="Button Pressed", button_values=[])
