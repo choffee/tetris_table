@@ -21,6 +21,8 @@ import logging
 import os
 import signal
 from games import tetris
+from games import snake
+import game_choice
 
 """
 Handle the fact that systemd sends us a HUP at the start.
@@ -52,7 +54,10 @@ except ImportError:
 
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+if os.getenv('DEBUG') == 'OFF':
+    logging.basicConfig(level=logging.ERROR)
+else:
+    logging.basicConfig(level=logging.DEBUG)
 
 board_width = 10
 board_height_hidden = 2
@@ -74,7 +79,12 @@ def main():
     light_board = lights.Board()
     board = new_board()
     table_buttons = buttons.Buttons()
-    game = tetris.Tetris(board, light_board, table_buttons)
+    games = [snake, tetris]
+    game_chooser = game_choice.Games(board, light_board, table_buttons, games)
+    game_chosen = game_chooser.run()
+    #game = tetris.Tetris(board, light_board, table_buttons)
+    board = new_board()
+    game = game_chosen.Game(board, light_board, table_buttons)
     game.run()
 
 

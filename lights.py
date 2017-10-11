@@ -27,11 +27,12 @@ colors = [
     [0, 255, 255],      # 7 - Cyan
 ]
 
+
 def strip_pos_to_board(led_num):
     xpos = int(led_num % led_height)
     ypos = int(led_num / led_height)
     if ypos % 2 == 0:
-        xpos = led_height - xpos -1
+        xpos = led_height - xpos - 1
     return (xpos, ypos)
 
 class Board(object):
