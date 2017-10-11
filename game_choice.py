@@ -76,13 +76,13 @@ class Games():
         return pressed
 
     def button_event(self, button):
-        if button == 4:
+        if button == 1:
             return pygame.K_LEFT
-        elif button == 7:
+        elif button == 3:
             return pygame.K_RIGHT
-        elif button == 5:
+        elif button == 2:
             return pygame.K_UP
-        elif button == 6:
+        elif button == 0:
             return pygame.K_DOWN
 
     def run(self):
