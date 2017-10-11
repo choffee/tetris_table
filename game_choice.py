@@ -19,6 +19,7 @@
 
 from random import randrange
 from operator import add
+from copy import copy
 
 import logging
 import pygame
@@ -52,7 +53,9 @@ class Games():
 
 
     def show_logo(self, logo):
-        self.board['pixels'] = logo
+        this_logo = copy(logo)
+        this_logo.reverse()
+        self.board['pixels'] = this_logo
         self.light_board.show_board(self.board)
 
     def next_game(self, selected_game, direction):
