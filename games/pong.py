@@ -176,13 +176,13 @@ class Game():
 
     def button_event(self, button):
         if button == 1:
-            self.set_direction(MOVE_L)
+            self.move_bat(1, MOVE_L)
         elif button == 3:
-            self.set_direction(MOVE_R)
-        elif button == 2:
-            self.set_direction(MOVE_U)
-        elif button == 0:
-            self.set_direction(MOVE_D)
+            self.move_bat(1, MOVE_R)
+        elif button == 4:
+            self.move_bat(2, MOVE_L)
+        elif button == 7:
+            self.move_bat(2, MOVE_R)
 
     def move_bat(self, bat, direction):
         position = self.bats_position[bat - 1]
