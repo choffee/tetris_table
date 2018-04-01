@@ -22,6 +22,7 @@ import os
 import signal
 from games import tetris
 from games import snake
+from games import pong
 import game_choice
 
 """
@@ -79,7 +80,7 @@ def main():
     light_board = lights.Board()
     board = new_board()
     table_buttons = buttons.Buttons()
-    games = [snake, tetris]
+    games = [snake, tetris, pong]
     game_chooser = game_choice.Games(board, light_board, table_buttons, games)
     game_chosen = game_chooser.run()
     #game = tetris.Tetris(board, light_board, table_buttons)
