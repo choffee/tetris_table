@@ -202,7 +202,7 @@ class Game():
         self.draw_bats()
 
 
-    def show_scores(self):
+    def show_scores(self, clear = True):
 
         for l in range(0, self.score_p1 + 1):
             self.board['pixels'][8][l] = 3
@@ -210,11 +210,12 @@ class Game():
             self.board['pixels'][self.board_real_height - 8][l] = 2
         self.light_board.show_board(self.board)
         delay(3000)
-        for l in range(0, self.score_p1 + 1):
-            self.board['pixels'][8][l] = 0
-        for l in range(0, self.score_p2):
-            self.board['pixels'][self.board_real_height - 8][l] = 0
-        self.light_board.show_board(self.board)
+        if clear:
+            for l in range(0, self.score_p1 + 1):
+                self.board['pixels'][8][l] = 0
+            for l in range(0, self.score_p2):
+                self.board['pixels'][self.board_real_height - 8][l] = 0
+            self.light_board.show_board(self.board)
 
     def run(self):
         """Run the game"""
@@ -268,7 +269,7 @@ class Game():
                 if event.key == pygame.K_q:
                     self.running = False
         if self.ended:
-            self.show_scores()
+            self.show_scores(clear = False)
             print("Thanks for playing")
             print("Level: ", self.level)
             print("Score Player 1: ", self.score_p1)
