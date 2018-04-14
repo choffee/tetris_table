@@ -225,13 +225,13 @@ class Game():
                 log.debug("New Ball: %s", new_ball_position)
                 if self.hits_bat(new_ball_position):
                     log.debug("Hit Bat")
+                    self.draw_bats()
                 elif self.hits_wall(new_ball_position):
                     log.debug("Hit wall")
                 elif self.scores_at_end(new_ball_position):
                     self.new_level()
                 else:
                     self.move_ball(new_ball_position)
-            self.draw_bats()
             if event.type == USEREVENT+1:
                 for button in self.buttons_pressed(controls.get_buttons()):
                     log.debug("Button pressed %s", button)
