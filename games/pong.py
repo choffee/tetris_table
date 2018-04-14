@@ -209,13 +209,20 @@ class Game():
         for l in range(0, self.score_p2):
             self.board['pixels'][self.board_real_height - 8][l] = 2
         self.light_board.show_board(self.board)
-        delay(3000)
+        self.pause_game(self, 3000)
         if clear:
             for l in range(0, self.score_p1 + 1):
                 self.board['pixels'][8][l] = 0
             for l in range(0, self.score_p2):
                 self.board['pixels'][self.board_real_height - 8][l] = 0
             self.light_board.show_board(self.board)
+
+    def pause_game(self, time_ms):
+        pygame.time.set_timer(USEREVENT, 0)  # every 100 miliseconds
+        pygame.time.set_timer(USEREVENT+1, 0)  # every 10 milliseconds
+        delay(time_ms)
+        pygame.time.set_timer(USEREVENT, 100)  # every 100 miliseconds
+        pygame.time.set_timer(USEREVENT+1, 10)  # every 10 milliseconds
 
     def run(self):
         """Run the game"""
