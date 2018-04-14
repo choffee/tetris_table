@@ -164,9 +164,9 @@ class Game():
 
     def button_event(self, button):
         if button == 1:
-            self.set_direction(MOVE_L)
-        elif button == 3:
             self.set_direction(MOVE_R)
+        elif button == 3:
+            self.set_direction(MOVE_L)
         elif button == 2:
             self.set_direction(MOVE_U)
         elif button == 0:

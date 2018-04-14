@@ -33,6 +33,7 @@ def strip_pos_to_board(led_num):
     ypos = int(led_num / led_height)
     if ypos % 2 == 0:
         xpos = led_height - xpos - 1
+    ypos = led_width - ypos - 1
     return (xpos, ypos)
 
 class Board(object):

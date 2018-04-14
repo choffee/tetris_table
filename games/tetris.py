@@ -235,9 +235,9 @@ class Game():
 
     def button_event(self, button):
         if button == 1: # 4
-            self.move_left()
-        elif button == 3: # 7
             self.move_right()
+        elif button == 3: # 7
+            self.move_left()
         elif button == 2: # 5
             self.rotate()
         elif button == 0: # 6
