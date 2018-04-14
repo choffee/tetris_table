@@ -24,6 +24,7 @@ import logging
 import pygame
 from pygame.locals import USEREVENT, QUIT, KEYDOWN
 # from pygame.color import *
+from pygame.time import delay
 
 
 log = logging.getLogger(__name__)
@@ -198,6 +199,21 @@ class Game():
             self.bats_position[bat - 1] = position + mv
         self.draw_bats()
 
+
+    def show_scores(self):
+
+        for l in range(0, self.score_p1 + 1):
+            self.board['pixels'][8][l] = 1
+        for l in range(0, self.score_p2):
+            self.board['pixels'][self.board_real_height - 8][l] = 1
+        self.light_board.show_board(self.board)
+        delay(3000)
+        for l in range(0, self.score_p1 + 1):
+            self.board['pixels'][8][l] = 0
+        for l in range(0, self.score_p2):
+            self.board['pixels'][self.board_real_height - 8][l] = 0
+        self.light_board.show_board(self.board)
+
     def run(self):
         """Run the game"""
         log.debug("Run the game")
@@ -210,6 +226,7 @@ class Game():
             self.row_sound = pygame.mixer.Sound("./sounds/jump.wav")
         except:
             pass
+
 
         controls = self.buttons
         self.light_board.show_board(self.board)
@@ -229,6 +246,7 @@ class Game():
                 elif self.hits_wall(new_ball_position):
                     log.debug("Hit wall")
                 elif self.scores_at_end(new_ball_position):
+                    self.show_scores()
                     self.new_level()
                 else:
                     self.move_ball(new_ball_position)
@@ -248,6 +266,7 @@ class Game():
                 if event.key == pygame.K_q:
                     self.running = False
         if self.ended:
+            self.show_scores()
             print("Thanks for playing")
             print("Level: ", self.level)
             print("Score Player 1: ", self.score_p1)
