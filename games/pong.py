@@ -139,7 +139,7 @@ class Game():
             if bat == 1:
                 bat_y = 0
             else:
-                bat_y = self.board_real_height
+                bat_y = self.board_real_height - 1
             if y_pos == bat_y:
                 bat_x = self.bats_position[bat - 1]
                 if x_pos >= bat_x and x_pos <= bat_x + self.bat_width:
