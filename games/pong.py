@@ -139,7 +139,7 @@ class Game():
             if bat == 1:
                 bat_y = 0
             else:
-                bat_y = self.board_real_height - 1
+                bat_y = self.board_real_height
             if y_pos == bat_y:
                 bat_x = self.bats_position[bat - 1]
                 if x_pos >= bat_x and x_pos <= bat_x + self.bat_width:
@@ -156,13 +156,16 @@ class Game():
 
     def scores_at_end(self, new_position):
         """ Does somebody score at the end? """
+        has_score = False
         if new_position[1] < 1:
             self.score_p2 += 1
-            return True
+            has_score = True
         if new_position[1] > self.board_real_height - 1:
             self.score_p1 += 1
-            return True
-        return False
+            has_score = True
+        if has_score and (self.score_p1 > 5 or self.score_p2 > 5):
+            self.ended = True
+        return has_score
 
     def buttons_pressed(self, new_values):
         pressed = []
@@ -228,6 +231,7 @@ class Game():
                     self.new_level()
                 else:
                     self.move_ball(new_ball_position)
+            self.draw_bats()
             if event.type == USEREVENT+1:
                 for button in self.buttons_pressed(controls.get_buttons()):
                     log.debug("Button pressed %s", button)
@@ -246,7 +250,8 @@ class Game():
         if self.ended:
             print("Thanks for playing")
             print("Level: ", self.level)
-            print("Score: ", self.score)
+            print("Score Player 1: ", self.score_p1)
+            print("Score Player 2: ", self.score_p2)
 
 
 def main():
