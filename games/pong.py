@@ -106,11 +106,13 @@ class Game():
         for bat_num, bat_pos in enumerate(self.bats_position):
             if bat_num == 1:
                 y_pos = self.board_real_height - 1
+                colour = 2
             else:
                 y_pos = 0
+                colour = 3
             for x in range(self.board['width']):
                 if x >= bat_pos and x <= bat_pos + self.bat_width:
-                    pixel = 1
+                    pixel = colour
                 else:
                     pixel = 0
                 print(self.board['pixels'])
@@ -122,7 +124,7 @@ class Game():
         """Move the ball to new location"""
         x_pos, y_pos = new_position
         self.board['pixels'][self.ball_position[1]][self.ball_position[0]] = 0
-        self.board['pixels'][y_pos][x_pos] = 1
+        self.board['pixels'][y_pos][x_pos] = 7
         self.ball_position = new_position
         self.light_board.show_board(self.board)
 
@@ -203,9 +205,9 @@ class Game():
     def show_scores(self):
 
         for l in range(0, self.score_p1 + 1):
-            self.board['pixels'][8][l] = 1
+            self.board['pixels'][8][l] = 3
         for l in range(0, self.score_p2):
-            self.board['pixels'][self.board_real_height - 8][l] = 1
+            self.board['pixels'][self.board_real_height - 8][l] = 2
         self.light_board.show_board(self.board)
         delay(3000)
         for l in range(0, self.score_p1 + 1):
